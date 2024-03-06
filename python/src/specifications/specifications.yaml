@@ -14,7 +14,7 @@ plugin:
           description: The directory into which the CSV file will be generated.
       acceptance:
         - name: acceptance-criteria
-          scenario: A CSV file is generated from a valid specification.
+          scenarios: 
             - name: acceptance-cases
               given:
                 - The {{spec-csv.input.architecture-file}} contains a valid architecture specification.
