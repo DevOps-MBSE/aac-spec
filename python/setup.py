@@ -1,6 +1,5 @@
 import logging
 from setuptools import find_packages, setup
-from src.aac import __version__
 from os import linesep
 
 README_FILE_PATH = "../README.md"
@@ -88,7 +87,6 @@ test_dependencies = [
 
 setup(
     name="aac-spec",
-    version=__version__,
     description=(
         "Specification and requirement tracing plugins for Architecture-as-Code"
     ),
