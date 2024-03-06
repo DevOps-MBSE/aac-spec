@@ -46,4 +46,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: failed_test_log
-        path: python/src/aac/aac.log
+        path: python/src/specifications/aac-spec.log
