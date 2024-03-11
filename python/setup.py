@@ -35,7 +35,7 @@ runtime_dependencies = [
 ]
 
 development_dependencies = [
-    "aac ~= 3.9",
+    "aac ~= 0.4.3",
     "wheel ~= 0.42.0",
     "pip-tools >= 6.9.0",
     "tomli < 2.0.0",
