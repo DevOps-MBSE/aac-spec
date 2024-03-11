@@ -11,7 +11,7 @@ authors = [
 description = "Specification plugin for AaC"
 requires-python = "== 3.9.13"
 dependencies = [
-	"aac"
+	"aac==0.4.3"
 ]
 readme = "README.md"
 license = {text = "MIT License"}
