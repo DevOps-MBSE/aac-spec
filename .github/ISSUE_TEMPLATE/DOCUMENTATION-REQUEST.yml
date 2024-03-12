@@ -1,11 +1,11 @@
-name: "✏️📘 Documentation Request"
-description: Create a new ticket for a documentation request
-title: "✏️📘 [Documentation] - <title>"
+name: "✏️📘 Specification Documentation Request"
+description: Create a new ticket for a documentation request in the Specification repository.
+title: "✏️📘 [Specification Documentation] - <title>"
 labels: [
   "documentation"
 ]
 projects: [
-  "DevOps-MBSE/aac-spec"
+  "DevOps-MBSE"
 ]
 body:
   - type: checkboxes
