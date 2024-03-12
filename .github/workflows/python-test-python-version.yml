@@ -23,7 +23,7 @@ jobs:
       with:
         python-version: ${{ matrix.py_version }}
 
-    - name: Install the AaC Package
+    - name: Install the AaC Specification Package
       run: pip install -r requirements.txt
 
     - name: Run Tox Tests

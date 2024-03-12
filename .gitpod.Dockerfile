@@ -1,7 +1,7 @@
 FROM gitpod/workspace-full
 
 # Python Dependencies
-ARG PYTHON_VERSION=3.9
+ARG PYTHON_VERSION=3.9.13
 
 RUN sudo add-apt-repository ppa:deadsnakes/ppa -y
 RUN sudo apt install python${PYTHON_VERSION} -y

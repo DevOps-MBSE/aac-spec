@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath("."))
 
 # -- Project information -----------------------------------------------------
 
-project = "Architecture-as-Code-Specifications-Plugin"
+project = "Architecture-as-Code Specifications Plugin"
 copyright = f"2021 - {str(date.today().year)} , AaC Project Contributors"
 author = "AaC Project Contributors"
 
