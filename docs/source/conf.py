@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.abspath("."))
 
 project = "Architecture-as-Code Specifications Plugin"
 copyright = f"2021 - {str(date.today().year)} , AaC Project Contributors"
-author = "AaC Project Contributors"
+author = "AaC Specifications Project Contributors"
 
 # The full version, including alpha/beta/rc tags
 release = metadata.version("aac")
