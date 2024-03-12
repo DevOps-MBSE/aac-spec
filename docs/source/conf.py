@@ -21,11 +21,11 @@ sys.path.insert(0, os.path.abspath("."))
 # -- Project information -----------------------------------------------------
 
 project = "Architecture-as-Code Specifications Plugin"
-copyright = f"2021 - {str(date.today().year)} , AaC Project Contributors"
+copyright = f"2021 - {str(date.today().year)} , AaC Specifications Project Contributors"
 author = "AaC Specifications Project Contributors"
 
 # The full version, including alpha/beta/rc tags
-release = metadata.version("aac")
+release = metadata.version("aac-spec")
 
 
 # -- General configuration ---------------------------------------------------
