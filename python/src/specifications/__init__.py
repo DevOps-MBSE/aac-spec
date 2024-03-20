@@ -51,4 +51,4 @@ def _get_plugin_commands():
 
 
 def _get_plugin_definitions() -> list[Definition]:
-    return get_plugin_definitions_from_yaml(__package__, "specifications.yaml")
+    return get_plugin_definitions_from_yaml(__package__, "specifications.yml")
