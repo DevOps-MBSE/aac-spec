@@ -30,7 +30,6 @@ def spec_csv(architecture_file, output_directory) -> ExecutionResult:
         output_directory (str): The directory to write csv spec content.
     """
 
-
     def get_csv():
         spec_definitions = _get_parsed_models(architecture_file)
         reqs = {}
