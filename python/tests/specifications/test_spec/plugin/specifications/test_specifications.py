@@ -10,29 +10,85 @@ from spec.plugin.specifications.specifications_impl import plugin_name, spec_csv
 
 class TestSpecifications(TestCase):
 
+    def setUp(self) -> None:
+        super().setUp()
+        self.maxDiff = None
+
     def test_spec_csv(self):
+        with TemporaryDirectory() as temp_dir, TemporaryAaCTestFile(VALID_SPEC) as temp_arch_file:
+            result = spec_csv(temp_arch_file.name, temp_dir)
+            assert_plugin_success(result)
 
-        # TODO: Write success and failure unit tests for spec_csv
-        self.fail("Test not yet implemented.")
+            # Assert each spec has its own file.
+            generated_file_names = os.listdir(temp_dir)
+            self.assertEqual(2, len(generated_file_names))
 
-    def run_spec_csv_cli_command_with_args(self, args: list[str]) -> Tuple[int, str]:
-        """Utility function to invoke the CLI command with the given arguments."""
-        initialize_cli()
-        runner = CliRunner()
-        result = runner.invoke(cli, ["spec-csv"] + args)
-        exit_code = result.exit_code
-        std_out = str(result.stdout)
-        output_message = std_out.strip().replace("\x1b[0m", "")
-        return exit_code, output_message
+            self.assertIn("Subsystem.csv", generated_file_names)
+            self.assertIn("Module.csv", generated_file_names)
 
-    def test_cli_spec_csv(self):
-        args = []
+            # Assert Subsystem.csv contents
+            with open(os.path.join(temp_dir, "Subsystem.csv")) as subsystem_csv_file:
+                subsystem_csv_contents = subsystem_csv_file.read()
+                # it's not clear what does and doesn't get quoted by the CSV writer, so eliminate quotes
+                subsystem_csv_contents = subsystem_csv_contents.replace('"', "")
+                # Assert csv contents are present
+                self.assertIn("Spec Name,Section,ID,Requirement,Parents,Children", subsystem_csv_contents)
+                self.assertIn(
+                    "Subsystem,,SUB-1,When receiving a message, the subsystem shall respond with a value.,,",
+                    subsystem_csv_contents,
+                )
+                self.assertIn("Subsystem,Other Requirements,SUB-2,Do things.,,", subsystem_csv_contents)
 
-        # TODO: populate args list, or pass empty list for no args
+            # Assert Module.csv contents
+            with open(os.path.join(temp_dir, "Module.csv")) as module_csv_file:
+                module_csv_contents = module_csv_file.read()
+                # it's not clear what does and doesn't get quoted by the CSV writer, so eliminate quotes
+                module_csv_contents = module_csv_contents.replace('"', "")
+                # Assert csv contents are present
+                self.assertIn("Spec Name,Section,ID,Requirement,Parents,Children", module_csv_contents)
+                self.assertIn(
+                    "Module,,MOD-1,When receiving a message, the module shall respond with a value.,SUB-1,",
+                    module_csv_contents,
+                )
+                self.assertIn("Module,,MOD-2,When receiving a message do things.,SUB-2,", module_csv_contents)
 
-        exit_code, output_message = self.run_spec_csv_cli_command_with_args(args)
 
-        # TODO:  perform assertions against the output message
-        self.assertEqual(0, exit_code)  # asserts the command ran successfully
-        self.assertTrue(len(output_message) > 0)  # asserts the command produced output
-        # TODO:  assert the output message is correct
+VALID_SPEC = """
+spec:
+  name: Subsystem
+  description:  This is a representative subsystem requirement specification.
+  requirements:
+    - id: "SUB-1"
+      shall:  When receiving a message, the subsystem shall respond with a value.
+      attributes:
+        - name: TADI
+          value: Test
+
+  sections:
+    - name: Other Requirements
+      description:  Other requirements.
+      requirements:
+        - id: "SUB-2"
+          shall: Do things.
+---
+spec:
+  name: Module
+  description:  This is a representative module requirement specification.
+  requirements:
+    - id: "MOD-1"
+      shall:  When receiving a message, the module shall respond with a value.
+      parent:
+        ids:
+          - "SUB-1"
+      attributes:
+        - name: TADI
+          value: Test
+    - id: "MOD-2"
+      shall:  When receiving a message do things.
+      parent:
+        ids:
+          - "SUB-2"
+      attributes:
+        - name: TADI
+          value: Test
+"""
