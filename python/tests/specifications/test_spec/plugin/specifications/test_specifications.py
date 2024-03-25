@@ -5,7 +5,7 @@ from aac.execute.command_line import cli, initialize_cli
 from aac.execute.aac_execution_result import ExecutionStatus
 
 
-from spec.plugin.specifications.specifications_impl import plugin_name, spec_csv
+from specifications.specifications_impl import plugin_name, spec_csv
 
 
 class TestSpecifications(TestCase):

@@ -1,6 +1,6 @@
 plugin:
   name: Specifications
-  package: spec.plugin.specifications
+  package: specifications
   description: An AaC plugin that enables requirement definition and traceability in Architecture-as-Code.
   commands:
     - name: spec-csv
