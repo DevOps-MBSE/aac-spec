@@ -12,12 +12,8 @@ from aac.execute.aac_execution_result import (
 )
 import csv
 from os import path, makedirs
-from aac.in_out.files.aac_file import AaCFile
-from aac.context.language_context import LanguageContext
 from aac.context.definition import Definition
-from aac.context.source_location import SourceLocation
 from aac.in_out.parser._parse_source import parse
-from typing import Any
 from typing import List
 
 
@@ -113,4 +109,4 @@ def _gen_spec_line_from_req_dict(spec_name: str, section_name: str, req: dict) -
     line["Children"] = child_ids
     return line
 
-    return ExecutionResult(plugin_name, "spec-csv", status, messages)
+    return ExecutionResult(plugin_name, "spec-csv", None, None)
