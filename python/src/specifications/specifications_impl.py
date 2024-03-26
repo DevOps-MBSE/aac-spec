@@ -10,10 +10,13 @@ from aac.execute.aac_execution_result import (
     ExecutionMessage,
     MessageLevel,
 )
+import csv
+from os import path, makedirs
 from aac.in_out.files.aac_file import AaCFile
 from aac.context.language_context import LanguageContext
 from aac.context.definition import Definition
 from aac.context.source_location import SourceLocation
+from aac.in_out.parser._parse_source import parse
 from typing import Any
 from typing import List
 
@@ -31,39 +34,39 @@ def spec_csv(architecture_file, output_directory) -> ExecutionResult:
         output_directory (str): The directory to write csv spec content.
     """
 
-    def get_csv():
-        spec_definitions = _get_parsed_models(architecture_file)
-        reqs = {}
-        for spec in spec_definitions:
-            file_name = path.basename(spec.source.uri)
-            reqs[spec.name] = _get_requirements(spec)
+    spec_definitions = parse(architecture_file)
+    reqs = {}
+    for spec in spec_definitions:
+        file_name = path.basename(spec.source.uri)
+        reqs[spec.name] = _get_requirements(spec)
 
-        field_names = ["Spec Name", "Section", "ID", "Requirement", "Parents", "Children"]
+    field_names = ["Spec Name", "Section", "ID", "Requirement", "Parents", "Children"]
 
-        # just in case, let's make sure the output directory exists
-        if not path.lexists(output_directory):
-            makedirs(output_directory)
+    # just in case, let's make sure the output directory exists
+    if not path.lexists(output_directory):
+        makedirs(output_directory)
 
-        file_counter = 0
-        for spec_name in reqs.keys():
-            file_name = spec_name + ".csv"
-            file_name = file_name.replace(" ", "_")
-            output_path = path.join(output_directory, file_name)
-            with open(output_path, "w") as output:
-                writer = csv.DictWriter(output, fieldnames=field_names)
-                writer.writeheader()
-                writer.writerows(reqs[spec_name])
-                file_counter = file_counter + 1
+    file_counter = 0
+    for spec_name in reqs.keys():
+        file_name = spec_name + ".csv"
+        file_name = file_name.replace(" ", "_")
+        output_path = path.join(output_directory, file_name)
+        with open(output_path, "w") as output:
+            writer = csv.DictWriter(output, fieldnames=field_names)
+            writer.writeheader()
+            writer.writerows(reqs[spec_name])
+            file_counter = file_counter + 1
 
-        return f"{file_counter} CSV spec files written to {output_directory}"
+    status = ExecutionStatus.SUCCESS
+    messages: list[ExecutionMessage] = []
+    messages.append(ExecutionMessage(f"{file_counter} CSV spec files written to {output_directory}", MessageLevel.INFO, None, None))
 
-    with plugin_result(plugin_name, get_csv) as result:
-        return result
+    return ExecutionResult(plugin_name, "Specifications", status, messages)
 
 
-def _get_parsed_models(architecture_file: str) -> List[Definition]:
-    with validated_source(architecture_file) as result:
-        return result.definitions
+# def _get_parsed_models(architecture_file: str) -> List[Definition]:
+#     with validated_source(architecture_file) as result:
+#         return result.definitions
 
 def _get_requirements(spec: Definition) -> List[dict]:
     ret_val: List[dict] = []

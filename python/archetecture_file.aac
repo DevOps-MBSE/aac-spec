@@ -1,0 +1,37 @@
+spec:
+  name: Subsystem
+  description:  This is a representative subsystem requirement specification.
+  requirements:
+    - id: "SUB-1"
+      shall:  When receiving a message, the subsystem shall respond with a value.
+      attributes:
+        - name: TADI
+          value: Test
+
+  sections:
+    - name: Other Requirements
+      description:  Other requirements.
+      requirements:
+        - id: "SUB-2"
+          shall: Do things.
+---
+spec:
+  name: Module
+  description:  This is a representative module requirement specification.
+  requirements:
+    - id: "MOD-1"
+      shall:  When receiving a message, the module shall respond with a value.
+      parent:
+        ids:
+          - "SUB-1"
+      attributes:
+        - name: TADI
+          value: Test
+    - id: "MOD-2"
+      shall:  When receiving a message do things.
+      parent:
+        ids:
+          - "SUB-2"
+      attributes:
+        - name: TADI
+          value: Test
