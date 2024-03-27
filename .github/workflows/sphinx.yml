@@ -40,7 +40,7 @@ jobs:
       - name: Build Documentation
         uses: ammaraskar/sphinx-action@0.4
         with:
-          pre-build-command: "pip install -e ."
+          pre-build-command: "pip install specifications"
           docs-folder: "docs/"
 
       - name: Upload Artifact
