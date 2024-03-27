@@ -14,4 +14,5 @@ tox==4.14.1
 attrs==22.2.0
 pyrsistent==0.19.3
 types-PyYAML==6.0.12.2
+six==1.16.0
 
