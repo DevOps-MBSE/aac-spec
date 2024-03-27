@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: 3.9.13
       - name: Install the aac-spec Package
-        run: pip install aac-spec -e .[all]
+        run: pip install -e .
 
       - name: Install requirements
         run: pip install -r requirements.txt

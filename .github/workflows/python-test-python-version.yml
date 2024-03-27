@@ -25,6 +25,10 @@ jobs:
 
     - name: Install the AaC Specification Package
       run: pip install -e .
+      
+    - name: Install requirements
+      run: pip install -r requirements.txt
+      
 
     - name: Install requirements
       run: pip install -r requirements.txt
