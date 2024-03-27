@@ -7,10 +7,10 @@ plugin:
       help_text: Generate a CSV file listing requirements.
       input:
         - name: architecture-file
-          type: string
+          type: file
           description:  The file to convert into CSV.
         - name: output-directory
-          type: string
+          type: directory
           description: The directory into which the CSV file will be generated.
       acceptance:
         - name: Generate a Specification CSV

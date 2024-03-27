@@ -10,4 +10,5 @@ nose2==0.14.1
 coverage==7.4.3
 pyflakes==2.4
 flake8==4.0
+tox==4.14.1
 

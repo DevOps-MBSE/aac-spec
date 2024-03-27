@@ -9,7 +9,3 @@ Feature: Generate a Specification CSV
       Given The {{spec-csv.input.architecture-file}} contains a valid architecture specification.
       When The aac-spec app is run with the spec-csv command.
       Then The aac-spec app is run with the spec-csv command.
-      
-    
-  
-  

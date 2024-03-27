@@ -60,10 +60,6 @@ def spec_csv(architecture_file, output_directory) -> ExecutionResult:
     return ExecutionResult(plugin_name, "Specifications", status, messages)
 
 
-# def _get_parsed_models(architecture_file: str) -> List[Definition]:
-#     with validated_source(architecture_file) as result:
-#         return result.definitions
-
 def _get_requirements(spec: Definition) -> List[dict]:
     ret_val: List[dict] = []
     if spec.get_root_key() in ["spec"]:  # make sure we're actually working with a spec here
