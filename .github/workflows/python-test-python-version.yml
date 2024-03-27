@@ -25,7 +25,10 @@ jobs:
 
     - name: Install the AaC Specification Package
       run: pip install -e .
-
+      
+    - name: Install requirements
+      run: pip install -r requirements.txt
+      
     - name: Run Tox Tests
       run: tox -e $(echo py${{ matrix.py_version }} | awk -F "." '{print $1$2;}')
 
