@@ -25,7 +25,7 @@ copyright = f"2021 - {str(date.today().year)} , AaC Specifications Project Contr
 author = "AaC Specifications Project Contributors"
 
 # The full version, including alpha/beta/rc tags
-release = metadata.version("aac-spec")
+release = metadata.version("specifications")
 
 
 # -- General configuration ---------------------------------------------------
