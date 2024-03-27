@@ -2,10 +2,13 @@ from unittest import TestCase
 from typing import Tuple
 from click.testing import CliRunner
 from aac.execute.command_line import cli, initialize_cli
-from aac.execute.aac_execution_result import ExecutionStatus
+from aac.execute.aac_execution_result import (
+    ExecutionResult,
+    ExecutionStatus,
+    ExecutionMessage,
+    MessageLevel,
+)
 from aac.context.language_context import LanguageContext
-from tests.helpers.assertion import assert_plugin_success
-from tests.helpers.assertion import assert_plugin_failure
 
 from specifications.specifications_impl import plugin_name, spec_csv
 
