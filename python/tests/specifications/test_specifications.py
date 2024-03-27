@@ -21,7 +21,7 @@ class TestSpecifications(TestCase):
         context = LanguageContext()
         good_arch_file = context.parse_and_load(VALID_SPEC)
         result = spec_csv(good_arch_file.name, temp_dir)
-        assert_plugin_success(result)
+        self.assertTrue(result.is_success())
 
         # Assert each spec has its own file.
         generated_file_names = os.listdir(temp_dir)
@@ -59,7 +59,7 @@ class TestSpecifications(TestCase):
         #test bad data
         bad_arch_file = context.parse_and_load(INVALID_SPEC_MISSING_REQ_ID)
         result = spec_csv(bad_arch_file.name, temp_dir)
-        assert_plugin_failure(result)
+        self.assertFalse(result.is_success())
 
 
 
