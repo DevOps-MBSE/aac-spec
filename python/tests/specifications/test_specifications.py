@@ -30,6 +30,8 @@ class TestSpecifications(TestCase):
             context = LanguageContext()
             # good_arch_file = context.parse_and_load(VALID_SPEC)
             # good_arch_file = create_test_file( f"{tempdir}/test.aac", VALID_SPEC.strip())
+            # context = LanguageContext()
+            # one_definition = spec_csv(context.parse_and_load(VALID_SPEC), TemporaryDirectory())
             result = spec_csv(VALID_SPEC, TemporaryDirectory())
             self.assertTrue(result.is_success())
 

@@ -12,7 +12,7 @@ from aac.execute.aac_execution_result import (
 )
 import csv
 from os import path, makedirs
-from aac.context.definition import Definition
+# from aac.context.definition import Definition
 from aac.in_out.parser._parse_source import parse
 from typing import List
 from aac.context.language_context import LanguageContext
@@ -33,6 +33,7 @@ def spec_csv(architecture_file, output_directory) -> ExecutionResult:
     context = LanguageContext()
     reqs = {}
     req_specs = {}
+    parsed_file = context.parse_and_load(architecture_file)
     for spec in architecture_file:
         definition = spec
         print(architecture_file)
@@ -42,6 +43,7 @@ def spec_csv(architecture_file, output_directory) -> ExecutionResult:
             req_specs.append(definition)
 
     for spec in req_specs:
+        ret_val = {}
         if spec.instance.root == "req_spec":  # make sure we're actually working with a spec here
             # collect data
             spec_definition = spec.instance
