@@ -21,7 +21,7 @@ from aac.context.language_context import LanguageContext
 plugin_name = "Specifications"
 
 
-def spec_csv(architecture_file, output_directory) -> ExecutionResult:
+def spec_csv(architecture_file: str, output_directory: str) -> ExecutionResult:
     """
     Generate a csv requirements table from a specification definition.
 
@@ -36,37 +36,35 @@ def spec_csv(architecture_file, output_directory) -> ExecutionResult:
     parsed_file = parse(architecture_file)
     for spec in parsed_file:
         definition = spec
-        print(architecture_file)
-        if definition.instance.root == "req":
-            reqs.append(definition)
-        if definition.instance.root == "req_spec":
-            req_specs.append(definition)
+        if definition.get_root_key() == "req":
+            # reqs.append(definition)
+            reqs[definition.name] = definition
+        if definition.get_root_key() == "req_spec":
+            req_specs[definition.name] = definition
 
+    rows = {}
     for spec in req_specs:
-        ret_val = {}
-        if spec.instance.root == "req_spec":  # make sure we're actually working with a spec here
-            # collect data
-            spec_definition = spec.instance
-            spec_name = spec_definition.name
-
+        ret_val = []
+        if req_specs[spec].get_root_key() == "req_spec":  # make sure we're actually working with a spec here
             # handle the spec root requirements
-            if "requirements" in spec_definition:
-                for req in spec_definition.requirements:
-                    for requirement in reqs:
-                        if req == requirement.instance.id:
-                            ret_val.append(_gen_spec_line_from_req_dict(spec_name, "", requirement))
+            # print(req_specs[spec])
+            if "requirements" in req_specs[spec].content:
+                # print(req_specs[spec].get_root_key())
+                # print(req_specs[spec].structure["req_spec"]["requirements"])
+                for req in req_specs[spec].structure["req_spec"]["requirements"]:
+                    if req in reqs:
+                        requirement = reqs[req]
+                        ret_val.append(_gen_spec_line_from_req_dict(req_specs[spec].name, "", requirement))
 
 
-
-            if "sections" in spec_definition:
-                for section in spec_definition.sections:
-                    for definition in req_specs:
-                        if section.instance.name == definition.instance.name:
-                            for req in definition.instance.requirements:
-                                for requirement in reqs:
-                                    if req == requirement.instance.id:
-                                        ret_val.append(_gen_spec_line_from_req_dict(spec_name, section.instance.name, requirement))
-
+            if "sections" in req_specs[spec].content:
+                for section in req_specs[spec].structure["req_spec"]["sections"]:
+                    # sec = req_specs["req_spec"][section]
+                    for req in req_specs[spec].structure["req_spec"]["requirements"]:
+                        if req in reqs:
+                                requirement = reqs[req]
+                                ret_val.append(_gen_spec_line_from_req_dict(req_specs[spec].name, section, requirement))
+        rows[spec] = ret_val
 
 
         # file_name = path.basename(spec.source.uri)
@@ -76,22 +74,27 @@ def spec_csv(architecture_file, output_directory) -> ExecutionResult:
     field_names = ["Spec Name", "Section", "ID", "Requirement", "Parents", "Children"]
 
     # just in case, let's make sure the output directory exists
-    if not path.lexists(output_directory):
-        makedirs(output_directory)
+    # if not path.lexists(output_directory):
+    #     makedirs(output_directory)
 
 
 
     file_counter = 0
+    # print(req_specs)
     for spec_name in req_specs:
-        file_name = spec_name.instance.name + ".csv"
+        print(req_specs[spec_name].name)
+        file_name = req_specs[spec_name].name + ".csv"
+        print(file_name)
         file_name = file_name.replace(" ", "_")
         output_path = path.join(output_directory, file_name)
+        print(output_path)
         with open(output_path, "w") as output:
             writer = csv.DictWriter(output, fieldnames=field_names)
             writer.writeheader()
-            writer.writerows(reqs[spec_name])
+            writer.writerows(rows[spec_name])
+            print(rows[spec_name])
             file_counter = file_counter + 1
-
+        print(file_counter)
     status = ExecutionStatus.SUCCESS
     messages: list[ExecutionMessage] = []
     messages.append(ExecutionMessage(f"{file_counter} CSV spec files written to {output_directory}", MessageLevel.INFO, None, None))
@@ -138,23 +141,23 @@ def spec_csv(architecture_file, output_directory) -> ExecutionResult:
 
 #     return ExecutionResult(plugin_name, "spec-csv", None, None)
 
-def _gen_spec_line_from_req_dict(spec_name: str, section_name: str, req: dict) -> dict:
+def _gen_spec_line_from_req_dict(spec_name: str, section_name: str, req) -> dict:
     line = {}
     line["Spec Name"] = spec_name
     line["Section"] = section_name
-    line["ID"] = req.instance.id
-    line["Requirement"] = req.instance.shall
+    line["ID"] = req.structure["req"]["id"]
+    line["Requirement"] = req.structure["req"]["shall"]
     parent_ids = ""
-    if "parents" in req.instance:
-        for parent_id in req.instance.parents:
+    if "parents" in req.content:
+        for parent_id in req.structure["req"]["parents"]:
             if len(parent_ids) == 0:
                 parent_ids = f"{parent_id}"
             else:
                 parent_ids = f"{parent_ids} {parent_id}"
         line["Parents"] = parent_ids
     child_ids = ""
-    if "children" in req.instance:
-        for child_id in req.instance.children:
+    if "children" in req.content:
+        for child_id in req.structure["req"]["children"]:
             if len(child_ids) == 0:
                 child_ids = f"{child_id}"
             else:
@@ -162,4 +165,4 @@ def _gen_spec_line_from_req_dict(spec_name: str, section_name: str, req: dict) -
     line["Children"] = child_ids
     return line
 
-    return ExecutionResult(plugin_name, "spec-csv", None, None)
+    # return ExecutionResult(plugin_name, "spec-csv", None, None)

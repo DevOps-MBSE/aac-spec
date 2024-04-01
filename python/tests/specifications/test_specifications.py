@@ -1,5 +1,6 @@
 from unittest import TestCase
 from tempfile import TemporaryDirectory
+import os
 from typing import Tuple
 from click.testing import CliRunner
 from aac.execute.command_line import cli, initialize_cli
@@ -28,22 +29,18 @@ class TestSpecifications(TestCase):
 
         with TemporaryDirectory() as tempdir:
             context = LanguageContext()
-            # good_arch_file = context.parse_and_load(VALID_SPEC)
-            # good_arch_file = create_test_file( f"{tempdir}/test.aac", VALID_SPEC.strip())
-            # context = LanguageContext()
-            # one_definition = spec_csv(context.parse_and_load(VALID_SPEC), TemporaryDirectory())
-            result = spec_csv(VALID_SPEC, TemporaryDirectory())
+            result = spec_csv(VALID_SPEC, tempdir)
             self.assertTrue(result.is_success())
 
             # Assert each spec has its own file.
-            generated_file_names = os.listdir(temp_dir)
-            self.assertEqual(2, len(generated_file_names))
+            generated_file_names = os.listdir(tempdir)
+            self.assertEqual(3, len(generated_file_names))
 
             self.assertIn("Subsystem.csv", generated_file_names)
             self.assertIn("Module.csv", generated_file_names)
 
             # Assert Subsystem.csv contents
-            with open(os.path.join(temp_dir, "Subsystem.csv")) as subsystem_csv_file:
+            with open(os.path.join(tempdir, "Subsystem.csv")) as subsystem_csv_file:
                 subsystem_csv_contents = subsystem_csv_file.read()
                 # it's not clear what does and doesn't get quoted by the CSV writer, so eliminate quotes
                 subsystem_csv_contents = subsystem_csv_contents.replace('"', "")
@@ -88,7 +85,7 @@ req_spec:
     name: Other Requirements
     description: Other requirements
     requirements:
-      - "SUB-2"
+        - "SUB-2"
 ---
 req:
     name: SUB-1
@@ -106,7 +103,7 @@ req:
         - name: TADI
           value: Test
 ---
-req-spec:
+req_spec:
   name: Module
   description:  This is a representative module requirement specification.
   requirements:
@@ -114,21 +111,22 @@ req-spec:
     - "MOD-2"
 ---
 req:
-    - name: MOD-1
-      shall:  When receiving a message, the module shall respond with a value.
-      parents:
+    name: MOD-1
+    id: "MOD-1"
+    shall:  When receiving a message, the module shall respond with a value.
+    parents:
         - "SUB-1"
-      attributes:
+    attributes:
         - name: TADI
           value: Test
 ---
 req:
-    - name: MOD-2
-      id: "MOD-2"
-      shall:  When receiving a message, do things.
-      parent:
-         - "SUB-2"
-      attributes:
+    name: MOD-2
+    id: "MOD-2"
+    shall:  When receiving a message, do things.
+    parents:
+        - "SUB-2"
+    attributes:
         - name: TADI
           value: Test
 """
