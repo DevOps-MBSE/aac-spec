@@ -30,7 +30,7 @@ def spec_csv(architecture_file: str, output_directory: str) -> ExecutionResult:
 
         output_directory (str): The directory to write csv spec content.
     """
-    context = LanguageContext()
+    # context = LanguageContext()
     reqs = {}
     req_specs = {}
     parsed_file = parse(architecture_file)
@@ -44,64 +44,62 @@ def spec_csv(architecture_file: str, output_directory: str) -> ExecutionResult:
 
     rows = {}
     for spec in req_specs:
-        ret_val = []
-        if req_specs[spec].get_root_key() == "req_spec":  # make sure we're actually working with a spec here
-            # handle the spec root requirements
-            # print(req_specs[spec])
-            if "requirements" in req_specs[spec].content:
-                # print(req_specs[spec].get_root_key())
-                # print(req_specs[spec].structure["req_spec"]["requirements"])
-                for req in req_specs[spec].structure["req_spec"]["requirements"]:
-                    if req in reqs:
-                        requirement = reqs[req]
-                        ret_val.append(_gen_spec_line_from_req_dict(req_specs[spec].name, "", requirement))
-
-
-            if "sections" in req_specs[spec].content:
-                for section in req_specs[spec].structure["req_spec"]["sections"]:
-                    # sec = req_specs["req_spec"][section]
-                    for req in req_specs[spec].structure["req_spec"]["requirements"]:
-                        if req in reqs:
-                                requirement = reqs[req]
-                                ret_val.append(_gen_spec_line_from_req_dict(req_specs[spec].name, section, requirement))
+        ret_val = _create_rows(req_specs, reqs, spec)
         rows[spec] = ret_val
-
-
-        # file_name = path.basename(spec.source.uri)
-        # req_specs[spec.name] = _get_requirements(spec)
-
 
     field_names = ["Spec Name", "Section", "ID", "Requirement", "Parents", "Children"]
 
     # just in case, let's make sure the output directory exists
-    # if not path.lexists(output_directory):
-    #     makedirs(output_directory)
-
-
+    if not path.lexists(output_directory):
+        makedirs(output_directory)
 
     file_counter = 0
     # print(req_specs)
     for spec_name in req_specs:
-        print(req_specs[spec_name].name)
-        file_name = req_specs[spec_name].name + ".csv"
-        print(file_name)
+        # print(req_specs[spec_name].name)
+        file_name = spec_name + ".csv"
+        # print(file_name)
         file_name = file_name.replace(" ", "_")
         output_path = path.join(output_directory, file_name)
-        print(output_path)
+        # print(output_path)
+        # if not os.path.exists(output_path):
+        file = open(output_path, "x")
+        file.close()
         with open(output_path, "w") as output:
             writer = csv.DictWriter(output, fieldnames=field_names)
             writer.writeheader()
             writer.writerows(rows[spec_name])
-            print(rows[spec_name])
+            # print(rows[spec_name])
             file_counter = file_counter + 1
-        print(file_counter)
+        # print(file_counter)
     status = ExecutionStatus.SUCCESS
     messages: list[ExecutionMessage] = []
     messages.append(ExecutionMessage(f"{file_counter} CSV spec files written to {output_directory}", MessageLevel.INFO, None, None))
 
     return ExecutionResult(plugin_name, "Specifications", status, messages)
 
+def _create_rows(req_specs, reqs, spec):
+    ret_val = []
+    if req_specs[spec].get_root_key() == "req_spec":  # make sure we're actually working with a spec here
+        # handle the spec root requirements
+        # print(req_specs[spec])
+        if "requirements" in req_specs[spec].content:
+            # print(req_specs[spec].get_root_key())
+            # print(req_specs[spec].structure["req_spec"]["requirements"])
+            for req in req_specs[spec].structure["req_spec"]["requirements"]:
+                if req in reqs:
+                    requirement = reqs[req]
+                    ret_val.append(_gen_spec_line_from_req_dict(req_specs[spec].name, "", requirement))
 
+        if "sections" in req_specs[spec].content:
+            for section in req_specs[spec].structure["req_spec"]["sections"]:
+                # sec = req_specs["req_spec"][section]
+                for req in req_specs[section].structure["req_spec"]["requirements"]:
+                    print(req)
+                    if req in reqs:
+                        requirement = reqs[req]
+                        ret_val.append(_gen_spec_line_from_req_dict(req_specs[spec].name, section, requirement))
+    return ret_val
 # def _get_requirements(spec: Definition) -> List[dict]:
 #     ret_val: List[dict] = []
 #     if spec.instance.root == "req_spec":  # make sure we're actually working with a spec here
