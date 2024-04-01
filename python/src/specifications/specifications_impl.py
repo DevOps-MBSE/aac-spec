@@ -33,8 +33,8 @@ def spec_csv(architecture_file, output_directory) -> ExecutionResult:
     context = LanguageContext()
     reqs = {}
     req_specs = {}
-    parsed_file = context.parse_and_load(architecture_file)
-    for spec in architecture_file:
+    parsed_file = parse(architecture_file)
+    for spec in parsed_file:
         definition = spec
         print(architecture_file)
         if definition.instance.root == "req":
