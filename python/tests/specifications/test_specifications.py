@@ -22,11 +22,6 @@ class TestSpecifications(TestCase):
         self.maxDiff = None
 
     def test_spec_csv(self):
-        def create_test_file(path: str, content: str) -> str:
-            with open(path, "w") as test_file:
-                test_file.write(content)
-            return path
-
         with TemporaryDirectory() as tempdir:
             context = LanguageContext()
             result = spec_csv(VALID_SPEC, tempdir)
