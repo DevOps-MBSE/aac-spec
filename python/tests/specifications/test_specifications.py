@@ -60,6 +60,11 @@ class TestSpecifications(TestCase):
                 )
                 self.assertIn("Module,,MOD-2,When receiving a message, do things.,SUB-2,", module_csv_contents)
 
+    def test_bad_data_spec_csv(self):
+        with TemporaryDirectory() as tempdir:
+            context = LanguageContext()
+            result = spec_csv(INVALID_SPEC_MISSING_REQ_ID, tempdir)
+            self.assertFalse(result.is_success(), "Expected Failure")
             #test bad data
             # bad_arch_file = context.parse_and_load(INVALID_SPEC_MISSING_REQ_ID)
             # result = spec_csv(bad_arch_file.name, temp_dir)
@@ -139,7 +144,7 @@ req_spec:
     name: Other Requirements
     description: Other requirements
     requirements:
-      - "SUB-2"
+        - "SUB-2"
 ---
 req:
     name: SUB-1
@@ -157,7 +162,7 @@ req:
         - name: TADI
           value: Test
 ---
-req-spec:
+req_spec:
   name: Module
   description:  This is a representative module requirement specification.
   requirements:
@@ -165,21 +170,22 @@ req-spec:
     - "MOD-2"
 ---
 req:
-    - name: MOD-1
-      shall:  When receiving a message, the module shall respond with a value.
-      parents:
+    name: MOD-1
+    id: "MOD-1"
+    shall:  When receiving a message, the module shall respond with a value.
+    parents:
         - "SUB-3"
-      attributes:
+    attributes:
         - name: TADI
           value: Test
 ---
 req:
-    - name: MOD-2
-      id: "MOD-2"
-      shall:  When receiving a message, do things.
-      parent:
-         - "SUB-2"
-      attributes:
+    name: MOD-2
+    id: "MOD-2"
+    shall:  When receiving a message, do things.
+    parents:
+        - "SUB-2"
+    attributes:
         - name: TADI
           value: Test
 """

@@ -42,6 +42,22 @@ def spec_csv(architecture_file: str, output_directory: str) -> ExecutionResult:
     for spec in req_specs:
         ret_val = _create_rows(req_specs, reqs, spec)
         rows[spec] = ret_val
+    # rows is a dictionary of lists(each file) of dictionaries(the rows in each file)
+    for file in rows:
+        for row in rows[file]:
+            if row["Parents"] != "":
+                if row["Parents"] not in reqs:
+                    req = row["Parents"]
+                    messages = []
+                    messages.append(ExecutionMessage(f"Parent {req} not found in requirements list", MessageLevel.INFO, None, None))
+                    return ExecutionResult(plugin_name, "Specifications", ExecutionStatus.GENERAL_FAILURE)
+            if row["Children"] != "":
+                if row["Children"] not in reqs:
+                    req = row["Children"]
+                    messages = []
+                    messages.append(ExecutionMessage(f"Child {req} not found in requirements list", MessageLevel.INFO, None, None))
+                    return ExecutionResult(plugin_name, "Specifications", ExecutionStatus.GENERAL_FAILURE)
+
 
     field_names = ["Spec Name", "Section", "ID", "Requirement", "Parents", "Children"]
 
@@ -97,7 +113,8 @@ def _gen_spec_line_from_req_dict(spec_name: str, section_name: str, req) -> dict
                 parent_ids = f"{parent_id}"
             else:
                 parent_ids = f"{parent_ids} {parent_id}"
-        line["Parents"] = parent_ids
+
+    line["Parents"] = parent_ids
     child_ids = ""
     if "children" in req.content:
         for child_id in req.structure["req"]["children"]:
