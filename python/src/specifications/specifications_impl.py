@@ -14,13 +14,12 @@ import csv
 from typing import List
 from os import path, makedirs
 from aac.in_out.parser._parse_source import parse
-from aac.plugins.check import run_check
 
 
 plugin_name = "Specifications"
 
 
-def before_spec_csv_check(architecture_file: str) -> ExecutionResult:
+def before_spec_csv_check(architecture_file: str, output_directory: str, run_check) -> ExecutionResult:
     return run_check(architecture_file, False, False)
 
 

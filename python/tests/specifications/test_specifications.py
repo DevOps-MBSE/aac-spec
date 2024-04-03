@@ -12,7 +12,7 @@ from aac.execute.aac_execution_result import (
 )
 from aac.context.language_context import LanguageContext
 
-from specifications.specifications_impl import plugin_name, spec_csv
+from specifications.specifications_impl import plugin_name, spec_csv, before_spec_csv_check
 
 
 class TestSpecifications(TestCase):
