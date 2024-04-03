@@ -14,9 +14,14 @@ import csv
 from typing import List
 from os import path, makedirs
 from aac.in_out.parser._parse_source import parse
+from aac.plugins.check import run_check
 
 
 plugin_name = "Specifications"
+
+
+def before_spec_csv_check(architecture_file: str) -> ExecutionResult:
+    return run_check(architecture_file, False, False)
 
 
 def spec_csv(architecture_file: str, output_directory: str) -> ExecutionResult:
@@ -43,21 +48,9 @@ def spec_csv(architecture_file: str, output_directory: str) -> ExecutionResult:
         ret_val = _create_rows(req_specs, reqs, spec)
         rows[spec] = ret_val
     # rows is a dictionary of lists(each file) of dictionaries(the rows in each file)
-    for file in rows:
-        for row in rows[file]:
-            if row["Parents"] != "":
-                if row["Parents"] not in reqs:
-                    req = row["Parents"]
-                    messages = []
-                    messages.append(ExecutionMessage(f"Parent {req} not found in requirements list", MessageLevel.INFO, None, None))
-                    return ExecutionResult(plugin_name, "Specifications", ExecutionStatus.GENERAL_FAILURE)
-            if row["Children"] != "":
-                if row["Children"] not in reqs:
-                    req = row["Children"]
-                    messages = []
-                    messages.append(ExecutionMessage(f"Child {req} not found in requirements list", MessageLevel.INFO, None, None))
-                    return ExecutionResult(plugin_name, "Specifications", ExecutionStatus.GENERAL_FAILURE)
-
+    (success, message) = parent_child_check(rows, reqs)
+    if success is False:
+        return ExecutionResult(plugin_name, "Specifications", ExecutionStatus.GENERAL_FAILURE, message)
 
     field_names = ["Spec Name", "Section", "ID", "Requirement", "Parents", "Children"]
 
@@ -124,3 +117,22 @@ def _gen_spec_line_from_req_dict(spec_name: str, section_name: str, req) -> dict
                 child_ids = f"{child_ids} {child_id}"
     line["Children"] = child_ids
     return line
+
+
+def parent_child_check(rows, reqs) -> (bool, List[ExecutionMessage]):
+    messages = []
+    success = True
+    for file in rows:
+        for row in rows[file]:
+            if row["Parents"] != "":
+                if row["Parents"] not in reqs:
+                    req = row["Parents"]
+                    messages.append(ExecutionMessage(f"Parent {req} not found in requirements list", MessageLevel.INFO, None, None))
+                    success = False
+
+            if row["Children"] != "":
+                if row["Children"] not in reqs:
+                    req = row["Children"]
+                    messages.append(ExecutionMessage(f"Child {req} not found in requirements list", MessageLevel.INFO, None, None))
+                    success = False
+    return (success, messages)

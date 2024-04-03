@@ -5,6 +5,9 @@ plugin:
   commands:
     - name: spec-csv
       help_text: Generate a CSV file listing requirements.
+      run_before:
+        - plugin: Check AaC
+          command: check
       input:
         - name: architecture-file
           type: file
