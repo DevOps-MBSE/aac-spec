@@ -15,6 +15,12 @@ dependencies = [
 ]
 readme = "README.md"
 license = {text = "MIT License"}
+[tool.setuptools]
+include-package-data = true
+[tool.setuptools.packages.find]
+where = ["src"]
+[tool.setuptools.package-data]
+mypkg = ["**/*.aac", "**/*.jinja2", "*.yaml"]
 keywords = ["SysML", "Architecture-as-Code", "System Engineering"]
 classifiers = [
 	"Programming Language :: Python :: 3",
