@@ -20,6 +20,7 @@ plugin_name = "Specifications"
 
 
 def before_spec_csv_check(architecture_file: str, output_directory: str, run_check) -> ExecutionResult:
+    """Run the Check AaC command before the spec-csv command"""
     return run_check(architecture_file, False, False)
 
 
@@ -47,7 +48,7 @@ def spec_csv(architecture_file: str, output_directory: str) -> ExecutionResult:
         ret_val = _create_rows(req_specs, reqs, spec)
         rows[spec] = ret_val
     # rows is a dictionary of lists(each file) of dictionaries(the rows in each file)
-    (success, message) = parent_child_check(rows, reqs)
+    (success, message) = _parent_child_check(rows, reqs)
     if success is False:
         return ExecutionResult(plugin_name, "Specifications", ExecutionStatus.GENERAL_FAILURE, message)
 
@@ -75,6 +76,15 @@ def spec_csv(architecture_file: str, output_directory: str) -> ExecutionResult:
 
 
 def _create_rows(req_specs, reqs, spec) -> List[dict]:
+    """
+    Creates Rows for a CSV file.
+    Args:
+        req_specs(dict): A dictionary containing the req_spec definitions
+
+        reqs(dict): A dictionary containing the req definitions
+
+        spec(str): A key for req_specs, pointing to the spec for which the current csv file is being generated
+    """
     ret_val = []
     if req_specs[spec].get_root_key() == "req_spec":  # make sure we're actually working with a spec here
         if "requirements" in req_specs[spec].content:
@@ -93,6 +103,15 @@ def _create_rows(req_specs, reqs, spec) -> List[dict]:
 
 
 def _gen_spec_line_from_req_dict(spec_name: str, section_name: str, req) -> dict:
+    """
+    Creates a line for a CSV file
+    Args:
+        spec_name(str): The name of the specification
+
+        section_name(str): The name of the section
+
+        req(Definition): The definition object of a requirement
+    """
     line = {}
     line["Spec Name"] = spec_name
     line["Section"] = section_name
@@ -118,7 +137,14 @@ def _gen_spec_line_from_req_dict(spec_name: str, section_name: str, req) -> dict
     return line
 
 
-def parent_child_check(rows, reqs) -> (bool, List[ExecutionMessage]):
+def _parent_child_check(rows, reqs) -> (bool, List[ExecutionMessage]):
+    """
+    Checks to confirm parents and children of requirements actually exist
+    Args:
+        rows(dict): A dictionary containing all the rows generated so far
+
+        reqs(dict): A dictionary containing all of the requirement definitions
+    """
     messages = []
     success = True
     for file in rows:
