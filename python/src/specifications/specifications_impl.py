@@ -20,7 +20,17 @@ plugin_name = "Specifications"
 
 
 def before_spec_csv_check(architecture_file: str, output_directory: str, run_check) -> ExecutionResult:
-    """Run the Check AaC command before the spec-csv command"""
+    """
+    Run the Check AaC command before the spec-csv command
+
+    Args:
+        architecture_file (str): The file to process for spec content.
+        output_directory (str): The directory to write csv spec content.
+        run_check: The run_check command from aac.plugins.check
+
+    Returns:
+        An ExecutionResult which contains indication of success or failure, and a list of command line messages
+    """
     return run_check(architecture_file, False, False)
 
 
@@ -30,8 +40,10 @@ def spec_csv(architecture_file: str, output_directory: str) -> ExecutionResult:
 
     Args:
         architecture_file (str): The file to process for spec content.
-
         output_directory (str): The directory to write csv spec content.
+
+    Returns:
+        An ExecutionResult which contains indication of success or failure, and a list of command line messages
     """
     reqs = {}
     req_specs = {}
@@ -78,12 +90,14 @@ def spec_csv(architecture_file: str, output_directory: str) -> ExecutionResult:
 def _create_rows(req_specs, reqs, spec) -> List[dict]:
     """
     Creates Rows for a CSV file.
+
     Args:
         req_specs(dict): A dictionary containing the req_spec definitions
-
         reqs(dict): A dictionary containing the req definitions
-
         spec(str): A key for req_specs, pointing to the spec for which the current csv file is being generated
+
+    Returns:
+        A List containing rows as dictionaries, with the key being the column name.
     """
     ret_val = []
     if req_specs[spec].get_root_key() == "req_spec":  # make sure we're actually working with a spec here
@@ -105,12 +119,14 @@ def _create_rows(req_specs, reqs, spec) -> List[dict]:
 def _gen_spec_line_from_req_dict(spec_name: str, section_name: str, req) -> dict:
     """
     Creates a line for a CSV file
+
     Args:
         spec_name(str): The name of the specification
-
         section_name(str): The name of the section
-
         req(Definition): The definition object of a requirement
+
+    Returns:
+        A dictionary of row entries with the key being the column name
     """
     line = {}
     line["Spec Name"] = spec_name
@@ -140,10 +156,14 @@ def _gen_spec_line_from_req_dict(spec_name: str, section_name: str, req) -> dict
 def _parent_child_check(rows, reqs) -> (bool, List[ExecutionMessage]):
     """
     Checks to confirm parents and children of requirements actually exist
+
     Args:
         rows(dict): A dictionary containing all the rows generated so far
-
         reqs(dict): A dictionary containing all of the requirement definitions
+
+    Returns:
+        A boolean value signifying if the check was successful or not
+        A List of ExecutionMessages to be returned by spec_csv in case of a failure.
     """
     messages = []
     success = True
