@@ -65,10 +65,6 @@ class TestSpecifications(TestCase):
             context = LanguageContext()
             result = spec_csv(INVALID_SPEC_MISSING_REQ_ID, tempdir)
             self.assertFalse(result.is_success(), "Expected Failure")
-            #test bad data
-            # bad_arch_file = context.parse_and_load(INVALID_SPEC_MISSING_REQ_ID)
-            # result = spec_csv(bad_arch_file.name, temp_dir)
-            # self.assertFalse(result.is_success())
 
 
 
