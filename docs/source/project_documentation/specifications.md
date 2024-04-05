@@ -1,6 +1,6 @@
 # Specifications Plugin
 
-The `Specifications` plugin traces `Requirement`s of provided `Specification`s.  It does this through the `spec-csv` command, which generates a .csv file for a `Specification` which tracks its `Requirement`s.
+The Specifications Plugin traces requirements of provided modeled specifications.  It does this through the `spec-csv` command, which generates a *.csv file for a `req-spec` which traces its `requirements`.
 
 ## Spec-Csv Command
 ```bash
@@ -10,10 +10,10 @@ aac spec-csv architecture-file.aac output_directory
 ### Arguments
 
 #### Architecture File
-The AaC file containing the `Specification`s and `Requirement`s definitions.
+The AaC file containing the `req-spec` and `req` definitions for a system, sub-system, or component.
 
 #### Output Directory
-The directory in which the .csv file will be generated.
+The directory in which the *.csv file(s) will be generated.
 
 ## Plugin Usage Example
 
@@ -23,7 +23,7 @@ An Architecture File, `architecture_file.aac`, contains the following definition
     :language: yaml
     :lines: 76-131
 ```
-If you would like to generate a CSV file tracking the requirement relationships in the current directory, you would execute the following command:
+If you would like to generate a CSV file tracing the requirement relationships in the current directory, you would execute the following command:
 ```bash
 aac spec-csv architecture-file.aac .
 ```
@@ -43,11 +43,11 @@ It would also generate the following three CSV files:
 
 ## Definition Type References
 
-The two root types of definitions `spec-csv` accepts are `req` and `req_spec`
+The two root types of definitions `spec-csv` accepts are `req` and `req_spec`.
 
 ### req_spec Definitions
 
-`req_spec`s are the `specification` definitions.  `spec-csv` will generate a CSV file for each `req_spec` provided by your architecture file, with a row for each given `requirement`
+`req_spec`s are the specification definitions.  `spec-csv` will generate a CSV file for each `req_spec` provided by your architecture file, with a row for each given requirement in the `requirements` field.
 
 #### req_spec Example
 ```yaml
@@ -69,7 +69,7 @@ req_spec:
 In the above example, all fields except for `name` are optional fields.  The `sections`, `parent_specs`, and `child_specs` fields all take the name of another `req_spec` definition, and the `requirements` field takes the `id` of a `req` definition.
 
 ### req Definition
-`req`s are the `requirement`s of `specification`s.  In the generated CSV files, there will be a row generated for each listed `requirement`.
+`req`s are the `requirements` of `req-spec`s.  In the generated CSV files, there will be a row generated for each listed requirement.
 
 #### req Example
 ```yaml
