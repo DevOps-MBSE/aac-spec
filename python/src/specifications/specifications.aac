@@ -1,20 +1,23 @@
 plugin:
   name: Specifications
-  package: aac-spec.plugin.specifications
+  package: specifications
   description: An AaC plugin that enables requirement definition and traceability in Architecture-as-Code.
   commands:
     - name: spec-csv
-      helpText: Generate a CSV file listing requirements.
+      help_text: Generate a CSV file listing requirements.
+      run_before:
+        - plugin: Check AaC
+          command: check
       input:
         - name: architecture-file
-          type: str
+          type: file
           description:  The file to convert into CSV.
         - name: output-directory
-          type: str
+          type: directory
           description: The directory into which the CSV file will be generated.
       acceptance:
         - name: Generate a Specification CSV
-          scenarios: 
+          scenarios:
             - name: Successful CSV Generation
               given:
                 - The {{spec-csv.input.architecture-file}} contains a valid architecture specification.

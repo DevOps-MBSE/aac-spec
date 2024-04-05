@@ -15,13 +15,20 @@ dependencies = [
 ]
 readme = "README.md"
 license = {text = "MIT License"}
+[tool.setuptools]
+include-package-data = true
+[tool.setuptools.packages.find]
+where = ["src"]
+[tool.setuptools.package-data]
+mypkg = ["**/*.aac", "**/*.jinja2", "*.yaml"]
 keywords = ["SysML", "Architecture-as-Code", "System Engineering"]
 classifiers = [
 	"Programming Language :: Python :: 3",
 	"License :: OSI Approved :: MIT License",
 	"Operating System :: OS Independent",
 ]
-
+[project.entry-points."aac"]
+spec-csv = "specifications"
 [project.urls]
 Homepage = "https://github.com/DevOps-MBSE/aac-spec"
 Issues = "https://github.com/DevOps-MBSE/aac-spec/issues"
