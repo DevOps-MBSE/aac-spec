@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "aac-spec"
 version = "0.1.1"
 authors = [
-	{ name="Will Bunch", email="William.Bunch@ngc.com" },
+	{ name="bunchw", email="asdfasdaf@email.com" },
 ]
 description = "Specification plugin for AaC"
 requires-python = ">= 3.9.13"
