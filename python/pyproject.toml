@@ -53,8 +53,8 @@ test = [
 ]
 all = [
 	"aac >= 0.4.3",
-	"aac-puml[doc]",
-	"aac-puml[test]"
+	"aac-spec[doc]",
+	"aac-spec[test]"
 ]
 
 [project.entry-points."aac"]
