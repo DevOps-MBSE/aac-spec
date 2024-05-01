@@ -20,9 +20,6 @@ jobs:
       - name: Install the aac-spec Package
         run: pip install -e .
 
-      - name: Install requirements
-        run: pip install -r requirements.txt
-
       - name: Lint with flake8
         run: flake8 .
 
