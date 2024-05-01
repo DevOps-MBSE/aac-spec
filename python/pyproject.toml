@@ -11,10 +11,20 @@ authors = [
 ]
 description = "Specification plugin for AaC"
 requires-python = ">= 3.9.13"
+readme = "README.md"
+license = {text = "MIT License"}
+keywords = ["SysML", "Architecture-as-Code", "System Engineering", "MBSE"]
+classifiers = [
+	"Programming Language :: Python :: 3",
+	"License :: OSI Approved :: MIT License",
+	"Operating System :: OS Independent",
+	"Topic :: Scientific/Engineering"
+]
+
 dependencies = [
 	"aac >= 0.4.3",
 ]
-[project.optional_dependencies]
+[project.optional-dependencies]
 doc = [
 	"sphinx >= 7.2.6",
 	"sphinx-autobuild ~= 2021.3.14",
@@ -35,21 +45,13 @@ test = [
 	"behave >= 1.2.6",
 	"build >= 1.1.1",
 	"coverage >= 7.4.3",
-	"flake8 >= 4.0",
-	"nose2 > =0.10.0",
+	"flake8 >= 4.0.0",
+	"nose2 >= 0.10.0",
 	"pipdeptree >= 2.16.1",
 	"pyflakes >= 2.4",
 	"tox >= 3.24"
 ]
-readme = "README.md"
-license = {text = "MIT License"}
-keywords = ["SysML", "Architecture-as-Code", "System Engineering", "MBSE"]
-classifiers = [
-	"Programming Language :: Python :: 3",
-	"License :: OSI Approved :: MIT License",
-	"Operating System :: OS Independent",
-	"Topic :: Scientific/Engineering"
-]
+
 [project.entry-points."aac"]
 spec-csv = "specifications"
 [project.urls]
