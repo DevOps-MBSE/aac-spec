@@ -24,7 +24,7 @@ jobs:
         python-version: ${{ matrix.py_version }}
 
     - name: Install the AaC Specification Package
-      run: pip install -e .
+      run: pip install -e .[all]
 
     - name: Run Tox Tests
       run: tox -e $(echo py${{ matrix.py_version }} | awk -F "." '{print $1$2;}')

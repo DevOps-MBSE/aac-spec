@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: 3.9.13
       - name: Install the aac-spec Package
-        run: pip install -e .
+        run: pip install -e .[all]
 
       - name: Lint with flake8
         run: flake8 .
