@@ -28,7 +28,7 @@ An Architecture File, `architecture_file.aac`, contains the following definition
 ```
 If you would like to generate a CSV file tracing the requirement relationships in the current directory, you would execute the following command:
 ```bash
-aac spec-csv architecture-file.aac .
+aac spec-csv architecture-file.aac ./output
 ```
 Which would return this in the command line:
 ![Run Spec-Csv in Command Line](../images/spec_csv_command_line.png)
