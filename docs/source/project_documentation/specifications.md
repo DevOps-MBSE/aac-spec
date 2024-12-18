@@ -31,9 +31,11 @@ If you would like to generate a CSV file tracing the requirement relationships i
 aac spec-csv architecture-file.aac .
 ```
 Which would return this in the command line:
-![Run Spec-Csv in Command Line](../images/spec-csv_command_line.png)
+![Run Spec-Csv in Command Line](../images/spec_csv_command_line.png)
 
-The succsefful execution of the command would generate the following three CSV files with the parsed content:
+The successful execution of the command would generate the following three CSV files with the parsed content:
+
+![Output CSV Files](../images/spec_csv_output.png)
 
 `Module.csv`:
 
