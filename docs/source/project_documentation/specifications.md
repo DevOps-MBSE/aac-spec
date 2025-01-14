@@ -15,30 +15,38 @@ The AaC file containing the `req-spec` and `req` definitions for a system, sub-s
 #### Output Directory
 The directory in which the *.csv file(s) will be generated.
 
+### Help
+![Specifications Help](../images/spec_csv_help.png)
+
 ## Plugin Usage Example
 
 An Architecture File, `architecture_file.aac`, contains the following definitions:
 ```{eval-rst}
 .. literalinclude:: ../../../python/tests/specifications/test_specifications.py
     :language: yaml
-    :lines: 76-131
+    :lines: 72-127
 ```
 If you would like to generate a CSV file tracing the requirement relationships in the current directory, you would execute the following command:
 ```bash
-aac spec-csv architecture-file.aac .
+aac spec-csv architecture-file.aac ./output
 ```
 Which would return this in the command line:
-![Run Spec-Csv in Command Line](../images/spec-csv_command_line.png)
+![Run Spec-Csv in Command Line](../images/spec_csv_command_line.png)
 
-It would also generate the following three CSV files:
+The successful execution of the command would generate the following three CSV files with the parsed content:
+
+![Output CSV Files](../images/spec_csv_output.png)
 
 `Module.csv`:
+
 ![Module CSV File](../images/Module_csv.png)
 
 `Subsystem.csv`:
+
 ![Subsystem CSV File](../images/Subsystem_csv.png)
 
 `Other_Requirements.csv`:
+
 ![Other_Requirements CSV File](../images/Other_Requirements_csv.png)
 
 ## Definition Type References
